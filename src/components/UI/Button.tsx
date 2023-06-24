@@ -43,7 +43,7 @@ export default function Button({
   if (hierarchy === "primary") {
     buttonClasses += " bg-gradient text-black";
   } else if (hierarchy === "secondary") {
-    buttonClasses += " bg-black text-white border border-purple2";
+    buttonClasses += " bg-black text-gradient border border-purple2";
   } else if (hierarchy === "tertiary") {
     buttonClasses += " text-gradient";
   }
