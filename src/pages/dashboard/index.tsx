@@ -1,4 +1,5 @@
 import Image, { type StaticImageData } from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { Send, User } from "react-feather";
 import logo from "~/../public/icons/logo.svg";
 import { COLORS } from "~/constants/colors";
@@ -35,10 +36,35 @@ const MESSAGES = [
 ];
 
 export default function Chat() {
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState(MESSAGES);
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, []);
+
+  useEffect(() => {
+    chatRef.current?.scrollTo({
+      top: chatRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages]);
+
+  const handleSendMessage = () => {
+    setMessages((prev) => [...prev, input]);
+    setInput("");
+  };
+
   return (
-    <div className="h-100dvh felx-col relative mx-5 flex overflow-y-hidden xs:mx-7 lg:mx-auto lg:max-w-[720px]">
-      <div className="no-scrollbar grid flex-grow gap-7 overflow-y-scroll pb-44 pt-32 xl:gap-9">
-        {MESSAGES.map((message, i) => (
+    <div className="h-100dvh relative mx-5 flex flex-col overflow-y-hidden xs:mx-7 lg:mx-auto lg:max-w-[720px]">
+      <div
+        ref={chatRef}
+        className="no-scrollbar grid flex-grow gap-7 overflow-y-scroll pb-44 pt-32 xl:gap-9"
+      >
+        {messages.map((message, i) => (
           <div className="flex gap-4 xl:gap-10" key={i}>
             {i % 2 === 0 ? (
               <Image
@@ -60,18 +86,27 @@ export default function Chat() {
         ))}
       </div>
       <div className="absolute inset-x-0 bottom-9 flex xl:bottom-12">
-        <div className="relative flex-grow">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMessage();
+          }}
+          className="relative flex-grow"
+        >
           <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             type="text"
             className="w-full rounded-md border border-purple2 bg-purple3 py-4.5 pl-5 pr-11 text-white outline-none placeholder:text-white placeholder:opacity-60"
             placeholder="Type your message here..."
           />
-          <Send
-            size={20}
-            color={COLORS.white}
-            className="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer opacity-60"
-          />
-        </div>
+          <div
+            onClick={handleSendMessage}
+            className="transition-300 absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 cursor-pointer place-content-center rounded-sm hover:bg-white hover:bg-opacity-10"
+          >
+            <Send size={20} color={COLORS.white} className="opacity-60" />
+          </div>
+        </form>
       </div>
     </div>
   );
