@@ -5,11 +5,9 @@ import logo from "~/../public/icons/logo.svg";
 import { COLORS } from "~/constants/colors";
 import axios from "axios";
 
-const MESSAGES = ; // prisma request here
-
 export default function Chat() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState(MESSAGES);
+  const [messages, setMessages] = useState<string[]>([]);
   const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,10 +23,18 @@ export default function Chat() {
     });
   }, [messages]);
 
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const response = await axios.get("/api/messages");
+      setMessages(response.data as string[]);
+    };
+
+    void fetchMessages();
+  }, []);
+
   const handleSendMessage = async () => {
-    setMessages((prev) => [...prev, input]);
-    const response = await axios.post('/api/handler', { data: input });
-    setMessages((prev) => [...prev, response.data.response as string]);
+    const response = await axios.post("/api/chat", { data: input });
+    setMessages((prev) => [...prev, response.data as string]);
     setInput("");
   };
 
@@ -65,7 +71,7 @@ export default function Chat() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleSendMessage();
+            void handleSendMessage();
           }}
           className="relative flex-grow"
         >
@@ -77,7 +83,7 @@ export default function Chat() {
             placeholder="Type your message here..."
           />
           <div
-            onClick={handleSendMessage}
+            onClick={() => void handleSendMessage()}
             className="transition-300 absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 cursor-pointer place-content-center rounded-sm hover:bg-white hover:bg-opacity-10"
           >
             <Send size={20} color={COLORS.white} className="opacity-60" />
