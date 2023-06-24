@@ -34,10 +34,10 @@ export default function Chat() {
 
   const handleSendMessage = async () => { 
     setMessages((prev) => [...prev, input]); // user input
-    const response = await axios.post("/api/chat", { data: input });
+    var response = await axios.post("/api/chat", { data: input });
     setMessages((prev) => [...prev, response.data as string]); // AI output
     setInput("");
-    const response = await axios.post("/api/save", { data: messages });
+    response = await axios.post("/api/save", { data: messages });
   };
 
   return (
