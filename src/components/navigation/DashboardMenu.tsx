@@ -7,6 +7,7 @@ import {
   TrendingUp,
 } from "react-feather";
 import { useDispatch, useSelector } from "react-redux";
+import { signOut } from "next-auth/react";
 import { closeMobileMenu } from "~/store/slices/mobileMenuSlice";
 import { type AppDispatch, type RootState } from "~/store/store";
 import { COLORS } from "~/constants/colors";
@@ -42,7 +43,9 @@ export default function DashboardMenu() {
       label: "Log Out",
       icon: <LogOut size={24} color={COLORS.white} />,
       isActive: false,
-      onClick: () => router.push("/"),
+      onClick: async () => {
+        await signOut();
+      },
     },
   ];
 

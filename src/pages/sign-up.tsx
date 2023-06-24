@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image, { type StaticImageData } from "next/image";
+import { signIn, useSession } from "next-auth/react";
 import AuthLayout from "~/components/layouts/AuthLayout";
 import { useFormik } from "formik";
 import TextInput from "~/components/UI/TextInput";
@@ -11,10 +12,13 @@ import { Eye, EyeOff } from "react-feather";
 import { COLORS } from "~/constants/colors";
 import worldCoinLogo from "~/../public/icons/worldcoin.svg";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/router";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -28,13 +32,19 @@ export default function SignUp() {
     },
   });
 
-  const handleGoogleSignUp = () => {
-    console.log("google signup");
+  const handleGoogleSignUp = async () => {
+    await signIn("google");
   };
 
   const handlWorldCoinSignUp = () => {
     console.log("worldcoin signup");
   };
+
+  if (status === "loading") {
+    return <p className="text-beige">Loading...</p>;
+  } else if (status === "authenticated") {
+    void router.push("/dashboard");
+  }
 
   return (
     <AuthLayout>
@@ -120,6 +130,7 @@ export default function SignUp() {
       </form>
       <Button
         type="button"
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={handleGoogleSignUp}
         hierarchy="secondary"
         font="font-semibold"
