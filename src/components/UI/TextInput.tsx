@@ -1,10 +1,10 @@
 interface TextInputProps {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   type: string;
   placeholder: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   padding?: string;
   icon?: React.ReactNode;
