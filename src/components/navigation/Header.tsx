@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import Image, { type StaticImageData } from "next/image";
 import logo from "~/../public/icons/logo.svg";
 import Button from "../UI/Button";
+import MobileMenuButton from "./MobileMenuButton";
 
 export default function Header() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function Header() {
           </Button>
         </div>
       )}
+      {pathname.includes("dashboard") && <MobileMenuButton />}
     </header>
   );
 }
