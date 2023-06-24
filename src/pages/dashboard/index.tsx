@@ -59,33 +59,35 @@ export default function Chat() {
   };
 
   return (
-    <div className="h-100dvh relative mx-5 flex flex-col overflow-y-hidden xs:mx-7 lg:mx-auto lg:max-w-[720px]">
+    <div className="h-100dvh relative flex flex-col overflow-y-hidden">
       <div
         ref={chatRef}
-        className="no-scrollbar grid flex-grow gap-7 overflow-y-scroll pb-44 pt-32 xl:gap-9"
+        className="no-scrollbar flex-grow overflow-y-scroll pb-44 pt-32"
       >
-        {messages.map((message, i) => (
-          <div className="flex gap-4 xl:gap-10" key={i}>
-            {i % 2 === 0 ? (
-              <Image
-                src={logo as StaticImageData}
-                alt="logo"
-                className="w-6 flex-shrink-0 xl:w-7"
-              />
-            ) : (
-              <User
-                size={48}
-                color={COLORS.blue}
-                className="w-6 flex-shrink-0 xl:w-7"
-              />
-            )}
-            <div className="rounded-sm border border-purple2 px-4 py-3 2xl:rounded-lg 2xl:px-5 2xl:py-4">
-              <p className="leading-loose text-white">{message}</p>
+        <div className="mx-5 grid gap-7 xs:mx-7 lg:mx-auto lg:max-w-[720px] xl:gap-9">
+          {messages.map((message, i) => (
+            <div className="flex gap-4 xl:gap-10" key={i}>
+              {i % 2 === 0 ? (
+                <Image
+                  src={logo as StaticImageData}
+                  alt="logo"
+                  className="w-6 flex-shrink-0 xl:w-7"
+                />
+              ) : (
+                <User
+                  size={48}
+                  color={COLORS.blue}
+                  className="w-6 flex-shrink-0 xl:w-7"
+                />
+              )}
+              <div className="rounded-sm border border-purple2 px-4 py-3 2xl:rounded-lg 2xl:px-5 2xl:py-4">
+                <p className="leading-loose text-white">{message}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-      <div className="absolute inset-x-0 bottom-9 flex xl:bottom-12">
+      <div className="absolute inset-x-0 bottom-9 mx-5 flex xs:mx-7 lg:mx-auto lg:max-w-[720px] xl:bottom-12">
         <form
           onSubmit={(e) => {
             e.preventDefault();
