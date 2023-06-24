@@ -32,10 +32,12 @@ export default function Chat() {
     void fetchMessages();
   }, []);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async () => { 
+    setMessages((prev) => [...prev, input]); // user input
     const response = await axios.post("/api/chat", { data: input });
-    setMessages((prev) => [...prev, response.data as string]);
+    setMessages((prev) => [...prev, response.data as string]); // AI output
     setInput("");
+    const response = await axios.post("/api/save", { data: messages });
   };
 
   return (
