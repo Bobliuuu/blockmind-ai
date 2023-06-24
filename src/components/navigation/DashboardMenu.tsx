@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
+import { MessageSquare } from "react-feather";
 import { useDispatch, useSelector } from "react-redux";
 import { closeMobileMenu } from "~/store/slices/mobileMenuSlice";
 import { type AppDispatch, type RootState } from "~/store/store";
+import { COLORS } from "~/constants/colors";
 
 export default function DashboardMenu() {
   const router = useRouter();
@@ -16,7 +18,17 @@ export default function DashboardMenu() {
       className={`transition-300 h-100dvh fixed inset-0 z-30 flex w-full flex-col bg-purple3 px-2 pb-4 pt-28 xs:px-5 sm:px-7 lg:pb-8 lg:pt-32 xl:w-[300px] xl:px-4 ${
         isMobileMenuOpen ? "translate-x-0" : "translate-x-full xl:translate-x-0"
       }`}
-    ></nav>
+    >
+      <DashboardMenuItem
+        label="New Chat"
+        icon={<MessageSquare size={24} color={COLORS.white} />}
+        isActive={false}
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onClick={() => router.push("/dashboard")}
+        classes="bg-purple2 bg-opacity-20"
+      />
+      <div className="bg-gradient mt-3 h-0.25" />
+    </nav>
   );
 }
 
