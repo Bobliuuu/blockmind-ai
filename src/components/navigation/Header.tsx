@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Image, { type StaticImageData } from "next/image";
 import logo from "~/../public/icons/logo.svg";
+import Button from "../UI/Button";
 
 export default function Header() {
   const router = useRouter();
@@ -16,7 +17,29 @@ export default function Header() {
         />
         <p className="text-lg text-beige 2xs:text-xl">BlockMind AI</p>
       </div>
-      {pathname === "/" && <div className="flex items-center gap-6"></div>}
+      {pathname === "/" && (
+        <div className="flex items-center gap-6">
+          <Button
+            type="route"
+            route="/log-in"
+            hierarchy="tertiary"
+            padding="px-1 pt-2 pb-2.5"
+            font="font-semibold"
+            classes="hidden lg:block"
+          >
+            Log In
+          </Button>
+          <Button
+            type="route"
+            route="/sign-up"
+            hierarchy="primary"
+            padding="px-4 pt-2 pb-2.5"
+            font="font-semibold"
+          >
+            Sign Up
+          </Button>
+        </div>
+      )}
     </header>
   );
 }
