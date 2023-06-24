@@ -8,7 +8,7 @@ export default function Hero() {
         BlockMind AI is <span className="text-gradient">a chatbot.</span>
       </h1>
       <p className="mx-auto mb-10 max-w-[353px] text-center text-beige xs:text-lg sm:max-w-[400px] sm:text-xl lg:mb-12 lg:max-w-[492px] lg:text-2xl">
-        Introducting the <span className="text-gradeint">AI</span> that serves
+        Introducting the <span className="text-gradient">AI</span> that serves
         as your personal guide in the world of{" "}
         <span className="text-gradient">blockchain</span>. Start by connected
         our wallet.
