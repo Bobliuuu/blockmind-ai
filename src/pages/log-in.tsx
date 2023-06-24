@@ -95,7 +95,6 @@ export default function LogIn() {
           type="submit"
           hierarchy="primary"
           font="font-semibold"
-          padding="py-3"
           classes="w-full mb-5 md:mb-6"
         >
           Log In
@@ -106,7 +105,6 @@ export default function LogIn() {
         onClick={handleGoogleLogin}
         hierarchy="secondary"
         font="font-semibold"
-        padding="py-3"
         icon={<FcGoogle size={20} />}
         classes="w-full mb-5 md:mb-6"
       >
@@ -117,7 +115,6 @@ export default function LogIn() {
         onClick={handlWorldCoinLogIn}
         hierarchy="secondary"
         font="font-semibold"
-        padding="py-3"
         icon={
           <Image
             src={worldCoinLogo as StaticImageData}
