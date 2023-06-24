@@ -34,8 +34,8 @@ export default function LogIn() {
     await signIn("google");
   };
 
-  const handlWorldCoinLogIn = () => {
-    console.log("worldcoin login");
+  const handlWorldCoinLogIn = async () => {
+    await signIn("worldcoin");
   };
 
   if (status === "loading") {
