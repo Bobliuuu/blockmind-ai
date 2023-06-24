@@ -1,5 +1,7 @@
 import { type NextApiRequest, type NextApiResponse } from "next";
 import { Configuration, CreateChatCompletionRequest, OpenAIApi, ChatCompletionRequestMessage } from "openai";
+import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { Configuration, OpenAIApi } from 'openai-edge'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
