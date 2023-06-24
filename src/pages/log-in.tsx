@@ -1,10 +1,16 @@
 import { useState } from "react";
 import Link from "next/link";
+import Image, { type StaticImageData } from "next/image";
 import AuthLayout from "~/components/layouts/AuthLayout";
 import { useFormik } from "formik";
 import TextInput from "~/components/UI/TextInput";
 import InputFeedback from "~/components/UI/InputFeedback";
+import Button from "~/components/UI/Button";
 import { validateLogIn } from "~/utils/formValidation";
+import { Eye, EyeOff } from "react-feather";
+import { COLORS } from "~/constants/colors";
+import worldCoinLogo from "~/../public/icons/worldcoin.svg";
+import { FcGoogle } from "react-icons/fc";
 
 export default function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,7 +60,75 @@ export default function LogIn() {
             <InputFeedback state="error">{formik.errors.email}</InputFeedback>
           )}
         </div>
+        <div className="mb-14 md:mb-16">
+          <TextInput
+            id="password"
+            name="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            icon={
+              showPassword ? (
+                <EyeOff
+                  size={24}
+                  color={COLORS.beige}
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <Eye
+                  size={24}
+                  color={COLORS.beige}
+                  onClick={() => setShowPassword(true)}
+                />
+              )
+            }
+          />
+          {formik.touched.password && formik.errors.password && (
+            <InputFeedback state="error">
+              {formik.errors.password}
+            </InputFeedback>
+          )}
+        </div>
+        <Button
+          type="submit"
+          hierarchy="primary"
+          font="font-semibold"
+          padding="py-3"
+          classes="w-full mb-5 md:mb-6"
+        >
+          Log In
+        </Button>
       </form>
+      <Button
+        type="button"
+        onClick={handleGoogleLogin}
+        hierarchy="secondary"
+        font="font-semibold"
+        padding="py-3"
+        icon={<FcGoogle size={20} />}
+        classes="w-full mb-5 md:mb-6"
+      >
+        Log in with Google
+      </Button>
+      <Button
+        type="button"
+        onClick={handlWorldCoinLogIn}
+        hierarchy="secondary"
+        font="font-semibold"
+        padding="py-3"
+        icon={
+          <Image
+            src={worldCoinLogo as StaticImageData}
+            alt="WorldCoin logo"
+            className="w-5"
+          />
+        }
+        classes="w-full mb-5 md:mb-6"
+      >
+        Log in with WorldCoin
+      </Button>
     </AuthLayout>
   );
 }

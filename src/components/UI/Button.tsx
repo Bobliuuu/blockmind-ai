@@ -10,7 +10,7 @@ interface ButtonProps {
   bg?: string;
   border?: string;
   padding?: string;
-  icon?: string;
+  icon?: React.ReactNode;
   disabled?: boolean;
   classes?: string;
   children: React.ReactNode;
@@ -31,7 +31,7 @@ export default function Button({
   classes,
   children,
 }: ButtonProps) {
-  let buttonClasses = `transition-300 inline-block text-center rounded-full 
+  let buttonClasses = `relative transition-300 inline-block text-center rounded-full 
                          ${font || ""} ${bg || ""} ${border || ""} 
                          ${padding || ""} ${classes || ""} 
                          ${
