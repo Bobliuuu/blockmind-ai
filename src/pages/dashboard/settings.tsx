@@ -1,8 +1,11 @@
 import Button from "~/components/UI/Button";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Settings() {
+  const router = useRouter();
   const handeLogOut = () => {
-    console.log("log out");
+    () => {() => signOut(); router.push("/log-in/")}
   };
 
   return (
