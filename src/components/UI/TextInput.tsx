@@ -5,7 +5,7 @@ interface TextInputProps {
   placeholder: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   padding?: string;
   icon?: React.ReactNode;
   iconOnClick?: () => void;
@@ -35,7 +35,7 @@ export default function TextInput({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        className={`transition-300 inline-block w-full rounded-md border border-purple2 bg-purple3 text-white outline-none placeholder:text-beige ${padding} ${
+        className={`transition-300 inline-block w-full rounded-md border border-purple2 bg-purple3 text-white outline-none placeholder:text-beige placeholder:opacity-70 ${padding} ${
           icon ? "pr-14" : ""
         }`}
       />
