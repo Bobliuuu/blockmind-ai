@@ -1,8 +1,8 @@
-export const validateLogIn = (values: { email: string; password: string }) => {
-  const errors: { email?: string; password?: string } = {};
+export const validateLogIn = (values: { username: string; password: string }) => {
+  const errors: { username?: string; password?: string } = {};
 
-  if (!values.email) {
-    errors.email = "Email is required.";
+  if (!values.username) {
+    errors.username = "Username is required.";
   }
 
   if (!values.password) {
@@ -13,18 +13,18 @@ export const validateLogIn = (values: { email: string; password: string }) => {
 };
 
 export const validateSignUp = (values: {
-  email: string;
+  username: string;
   password: string;
   confirmPassword: string;
 }) => {
   const errors: {
-    email?: string;
+    username?: string;
     password?: string;
     confirmPassword?: string;
   } = {};
 
-  if (!values.email) {
-    errors.email = "Email is required.";
+  if (!values.username) {
+    errors.username = "Username is required.";
   }
 
   if (!values.password) {

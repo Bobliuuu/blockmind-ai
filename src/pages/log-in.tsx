@@ -22,7 +22,7 @@ export default function LogIn() {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
     },
     validate: validateLogIn,
@@ -56,22 +56,64 @@ export default function LogIn() {
           Sign Up.
         </Link>
       </p>
+
+      <p className="mb-4 text-beige md:text-lg xl:mb-4">
+        Use an identity provider to get a{" "}
+        <span className="text-gradient">
+          free usage quota
+        </span>.
+      </p>
+      <Button
+        type="button"
+        onClick={handlWorldCoinLogIn}
+        hierarchy="secondary"
+        font="font-semibold"
+        icon={
+          <Image
+            src={worldCoinLogo as StaticImageData}
+            alt="WorldCoin logo"
+            className="w-5"
+          />
+        }
+        classes="w-full mb-5 md:mb-6"
+      >
+        Log in with WorldCoin
+      </Button>
+      <Button
+        type="button"
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        onClick={handleGoogleLogin}
+        hierarchy="secondary"
+        font="font-semibold"
+        icon={<FcGoogle size={20} />}
+        classes="w-full mb-12 md:mb-12"
+      >
+        Log in with Google
+      </Button>
+
+      <p className="mb-4 text-beige md:text-lg xl:mb-4">
+        Or sign up{" "}
+        <span className="text-gradient">
+          anonymously
+        </span>{"  "}
+        and pay with crypto.
+      </p>
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-5 md:mb-6">
           <TextInput
-            id="email"
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formik.values.email}
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Username"
+            value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           />
-          {formik.touched.email && formik.errors.email && (
-            <InputFeedback state="error">{formik.errors.email}</InputFeedback>
+          {formik.touched.username && formik.errors.username && (
+            <InputFeedback state="error">{formik.errors.username}</InputFeedback>
           )}
         </div>
-        <div className="mb-14 md:mb-16">
+        <div className="mb-5 md:mb-6">
           <TextInput
             id="password"
             name="password"
@@ -111,33 +153,6 @@ export default function LogIn() {
           Log In
         </Button>
       </form>
-      <Button
-        type="button"
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        onClick={handleGoogleLogin}
-        hierarchy="secondary"
-        font="font-semibold"
-        icon={<FcGoogle size={20} />}
-        classes="w-full mb-5 md:mb-6"
-      >
-        Log in with Google
-      </Button>
-      <Button
-        type="button"
-        onClick={handlWorldCoinLogIn}
-        hierarchy="secondary"
-        font="font-semibold"
-        icon={
-          <Image
-            src={worldCoinLogo as StaticImageData}
-            alt="WorldCoin logo"
-            className="w-5"
-          />
-        }
-        classes="w-full mb-5 md:mb-6"
-      >
-        Log in with WorldCoin
-      </Button>
     </AuthLayout>
   );
 }
