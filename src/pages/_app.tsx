@@ -4,6 +4,7 @@ import { type AppType } from "next/app";
 import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import Header from "~/components/navigation/Header";
+import ReduxProvider from "~/components/redux/ReduxProvider";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -11,8 +12,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Header />
-      <Component {...pageProps} />
+      <ReduxProvider>
+        <Header />
+        <Component {...pageProps} />
+      </ReduxProvider>
     </SessionProvider>
   );
 };
