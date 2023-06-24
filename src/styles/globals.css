@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Switzer-Variable";
+  src: url("../../public/fonts/Switzer-Variable.woff2") format("woff2"),
+    url("../../public/fonts/Switzer-Variable.woff") format("woff"),
+    url("../../public/fonts/Switzer-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Switzer-VariableItalic";
+  src: url("../../public/fonts/Switzer-VariableItalic.woff2") format("woff2"),
+    url("../../public/fonts/Switzer-VariableItalic.woff") format("woff"),
+    url("../../public/fonts/Switzer-VariableItalic.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "CabinetGrotesk-Variable";
+  src: url("../../public/fonts/CabinetGrotesk-Variable.woff2") format("woff2"),
+    url("../../public/fonts/CabinetGrotesk-Variable.woff") format("woff"),
+    url("../../public/fonts/CabinetGrotesk-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
