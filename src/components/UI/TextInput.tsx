@@ -35,7 +35,7 @@ export default function TextInput({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        className={`transition-300 inline-block w-full rounded-md bg-purple3 text-white outline-none placeholder:text-beige ${padding} ${
+        className={`transition-300 inline-block w-full rounded-md border border-purple2 bg-purple3 text-white outline-none placeholder:text-beige ${padding} ${
           icon ? "pr-14" : ""
         }`}
       />

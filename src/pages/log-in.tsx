@@ -2,6 +2,9 @@ import { useState } from "react";
 import Link from "next/link";
 import AuthLayout from "~/components/layouts/AuthLayout";
 import { useFormik } from "formik";
+import TextInput from "~/components/UI/TextInput";
+import InputFeedback from "~/components/UI/InputFeedback";
+import { validateLogIn } from "~/utils/formValidation";
 
 export default function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,6 +14,7 @@ export default function LogIn() {
       email: "",
       password: "",
     },
+    validate: validateLogIn,
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
     },
@@ -36,7 +40,20 @@ export default function LogIn() {
         </Link>
       </p>
       <form onSubmit={formik.handleSubmit}>
-        <div className="mb-5 md:mb-6"></div>
+        <div className="mb-5 md:mb-6">
+          <TextInput
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <InputFeedback state="error">{formik.errors.email}</InputFeedback>
+          )}
+        </div>
       </form>
     </AuthLayout>
   );
