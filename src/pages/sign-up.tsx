@@ -13,6 +13,7 @@ import { COLORS } from "~/constants/colors";
 import worldCoinLogo from "~/../public/icons/worldcoin.svg";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/router";
+import Loading from "~/components/sections/loading/loading";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +42,7 @@ export default function SignUp() {
   };
 
   if (status === "loading") {
-    return <p className="text-beige">Loading...</p>;
+    return <Loading />
   } else if (status === "authenticated") {
     void router.push("/dashboard");
   }
