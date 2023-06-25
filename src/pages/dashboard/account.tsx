@@ -75,12 +75,12 @@ export default function Settings() {
       <h3 className="mb-4 text-xl font-semibold text-white">
         Connected Wallet
       </h3>
-      <div className="rounded mb-16 flex max-w-[600px] overflow-hidden rounded-md border border-purple2">
+      {/* <div className="rounded mb-16 flex max-w-[600px] overflow-hidden rounded-md border border-purple2">
         <p className="flex-grow px-5 py-4.5 text-white text-opacity-60">
           dfasdfdsafdfsfdsafadsfdafdasadfsfadsfadsadsffds
         </p>
         <button className="bg-gradient px-5 py-4.5">Connect New Wallet</button>
-      </div>
+      </div> */}
 
       <Button
         type="button"
