@@ -11,6 +11,7 @@ import { validateLogIn } from "~/utils/formValidation";
 import { Eye, EyeOff } from "react-feather";
 import { COLORS } from "~/constants/colors";
 import worldCoinLogo from "~/../public/icons/worldcoin.svg";
+import polygonLogo from "~/../public/icons/polygon.png";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/router";
 import Loading from "~/components/sections/loading/loading";
@@ -40,7 +41,7 @@ export default function LogIn() {
   };
 
   if (status === "loading") {
-    return <Loading />
+    return <Loading />;
   } else if (status === "authenticated") {
     void router.push("/dashboard");
   }
@@ -59,9 +60,7 @@ export default function LogIn() {
 
       <p className="mb-4 text-beige md:text-lg xl:mb-4">
         Use an identity provider to get a{" "}
-        <span className="text-gradient">
-          free usage quota
-        </span>.
+        <span className="text-gradient">free usage quota</span>.
       </p>
       <Button
         type="button"
@@ -81,6 +80,22 @@ export default function LogIn() {
       </Button>
       <Button
         type="button"
+        onClick={handlWorldCoinLogIn}
+        hierarchy="secondary"
+        font="font-semibold"
+        icon={
+          <Image
+            src={polygonLogo as StaticImageData}
+            alt="WorldCoin logo"
+            className="w-5"
+          />
+        }
+        classes="w-full mb-5 md:mb-6"
+      >
+        Log in with Polygon ID
+      </Button>
+      <Button
+        type="button"
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={handleGoogleLogin}
         hierarchy="secondary"
@@ -92,10 +107,8 @@ export default function LogIn() {
       </Button>
 
       <p className="mb-4 text-beige md:text-lg xl:mb-4">
-        Or sign up{" "}
-        <span className="text-gradient">
-          anonymously
-        </span>{"  "}
+        Or sign up <span className="text-gradient">anonymously</span>
+        {"  "}
         and pay with crypto.
       </p>
       <form onSubmit={formik.handleSubmit}>
@@ -110,7 +123,9 @@ export default function LogIn() {
             onBlur={formik.handleBlur}
           />
           {formik.touched.username && formik.errors.username && (
-            <InputFeedback state="error">{formik.errors.username}</InputFeedback>
+            <InputFeedback state="error">
+              {formik.errors.username}
+            </InputFeedback>
           )}
         </div>
         <div className="mb-5 md:mb-6">
