@@ -1,10 +1,14 @@
 import { useRouter } from "next/router";
 import {
+  Edit,
   LogOut,
   MessageSquare,
   Repeat,
-  Settings,
   TrendingUp,
+  User,
+  Image,
+  Edit2,
+  Trash2,
 } from "react-feather";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "next-auth/react";
@@ -28,22 +32,28 @@ export default function DashboardMenu() {
       onClick: () => router.push("/dashboard/markets"),
     },
     {
+      label: "NFT Studio",
+      icon: <Image size={24} color={COLORS.white} />,
+      isActive: pathname === "/dashboard/studio",
+      onClick: () => router.push("/dashboard/studio"),
+    },
+    {
       label: "Send / Swap",
       icon: <Repeat size={24} color={COLORS.white} />,
       isActive: pathname === "/dashboard/send-swap",
       onClick: () => router.push("/dashboard/send-swap"),
     },
     {
-      label: "Settings",
-      icon: <Settings size={24} color={COLORS.white} />,
-      isActive: pathname === "/dashboard/settings",
-      onClick: () => router.push("/dashboard/settings"),
+      label: "Account",
+      icon: <User size={24} color={COLORS.white} />,
+      isActive: pathname === "/dashboard/account",
+      onClick: () => router.push("/dashboard/account"),
     },
     {
       label: "Log Out",
       icon: <LogOut size={24} color={COLORS.white} />,
       isActive: false,
-      onClick: async () => {() => signOut(); router.push("/log-in/")},
+      onClick: async () => {() => signOut(); router.push("/")},
     },
   ];
 

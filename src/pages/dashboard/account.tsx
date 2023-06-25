@@ -6,9 +6,6 @@ import Image, { type StaticImageData } from "next/image";
 import { ethers } from "ethers";
 export default function Settings() {
   const router = useRouter();
-  const handeLogOut = () => {
-    () => {() => signOut(); router.push("/log-in/")}
-  };
 
   const handleConnectMetamask = async () => {
     if (typeof window.ethereum !== 'undefined') {
@@ -33,8 +30,10 @@ export default function Settings() {
   return (
     <div className="mx-dashboard mt-32">
       <h1 className="mb-6 font-display text-4xl font-bold text-white md:text-5xl xl:mb-8 xl:text-6xl">
-        Settings
+        Account
       </h1>
+      <h4>TODO Here</h4>
+      <p>User account information, Type of account, Remaining free queries, Place to buy more queries, Wallet Connection</p>
       <h3 className="mb-4 text-xl font-semibold text-white">
         Connected Wallet
       </h3>
@@ -63,14 +62,6 @@ export default function Settings() {
       </Button>
 
       <h3 className="mb-4 text-xl font-semibold text-white">Account</h3>
-      <Button
-        type="button"
-        onClick={handeLogOut}
-        hierarchy="secondary"
-        classes="w-full max-w-[380px]"
-      >
-        Log Out
-      </Button>
     </div>
   );
 }

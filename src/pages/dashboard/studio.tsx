@@ -12,6 +12,14 @@ export default function NFTStudio() {
       <div className="flex flex-col gap-16 xl:flex-row">
         <div className="flex-grow">
           <p className="mb-4 font-semibold text-white">
+            Enter your wallet address.
+          </p>
+          <TextInput
+            type="text"
+            placeholder="Wallet address"
+            classes="max-w-[540px] mb-12"
+          />
+          <p className="mb-4 font-semibold text-white">
             Enter the URL of an image you would like to base your NFT off of.
           </p>
           <TextInput
@@ -27,6 +35,10 @@ export default function NFTStudio() {
             placeholder="Profile picture, music, fashion..."
             classes="max-w-[540px] mb-14"
           />
+          <p className="mb-4 font-semibold text-white">Cost</p>
+          <p className="mb-14 max-w-[540px] rounded-md border border-purple2 bg-purple3 px-5 py-4.5 text-white">
+            0.00123 ETH
+          </p>
           <Button type="button" hierarchy="primary" font="font-semibold">
             Generate
           </Button>
