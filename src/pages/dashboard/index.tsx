@@ -9,6 +9,7 @@ import Link from "next/link";
 type Message = {
   response?: string;
   url?: string;
+  uma?: string;
 };
 
 export default function Chat() {
@@ -87,7 +88,11 @@ export default function Chat() {
                     <div className="mt-6 flex justify-end gap-4">
                       <ThumbsUp color={COLORS.white} size={24} />
                       <ThumbsDown
-                        onClick={() => setShowUMA(message.response)}
+                        onClick={() => {
+                          setTimeout(() => {
+                            setShowUMA(message.response);
+                          }, 1000);
+                        }}
                         color={COLORS.white}
                         size={24}
                       />
@@ -98,7 +103,7 @@ export default function Chat() {
               {showUMA === message.response && (
                 <div className="rounded-sm border border-purple2 px-4 py-3 2xl:rounded-lg 2xl:px-5 2xl:py-4">
                   <p className="leading-loose text-white">
-                    Generating response from UMA...
+                    UMA says: {message.uma}
                   </p>
                 </div>
               )}
