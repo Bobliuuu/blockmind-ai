@@ -2,8 +2,11 @@ import Image, { type StaticImageData } from "next/image";
 import Button from "~/components/UI/Button";
 import TextInput from "~/components/UI/TextInput";
 import logo from "~/../public/icons/logo.svg";
+import { useRouter } from "next/router";
 
 export default function NFTStudio() {
+  const router = useRouter();
+
   const handleGenerateClick = () => {
     window.open(
       "https://bafybeifq6sm7pj2r4yu5anbawikzaemre6ocg3zvgw3kwh7rnwpzzvvece.ipfs.dweb.link/ri.jpg"
