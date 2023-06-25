@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import {
+  Edit,
   LogOut,
   MessageSquare,
   Repeat,
@@ -34,16 +35,19 @@ export default function DashboardMenu() {
       onClick: () => router.push("/dashboard/send-swap"),
     },
     {
-      label: "Settings",
-      icon: <Settings size={24} color={COLORS.white} />,
-      isActive: pathname === "/dashboard/settings",
-      onClick: () => router.push("/dashboard/settings"),
+      label: "NFT Studio",
+      icon: <Edit size={24} color={COLORS.white} />,
+      isActive: pathname === "/dashboard/nft-studio",
+      onClick: () => router.push("/dashboard/nft-studio"),
     },
     {
       label: "Log Out",
       icon: <LogOut size={24} color={COLORS.white} />,
       isActive: false,
-      onClick: async () => {() => signOut(); router.push("/log-in/")},
+      onClick: async () => {
+        () => signOut();
+        router.push("/log-in/");
+      },
     },
   ];
 
