@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ChevronDown } from "react-feather";
 import Button from "~/components/UI/Button";
 import TextInput from "~/components/UI/TextInput";
 import { COLORS } from "~/constants/colors";
 
 export default function SendSwap() {
+  const timeoutRef = useRef<number | null>(null);
+
   const ASSETS = [
     {
       symbol: "ETH",
       balance: "0.123",
     },
     {
-      symbol: "BTC",
-      balance: "0.123",
+      symbol: "GNOSIS",
+      balance: "22",
     },
     {
-      symbol: "USDT",
+      symbol: "DAI",
+      balance: "231",
+    },
+    {
+      symbol: "BTC",
       balance: "0.123",
     },
     {
@@ -43,7 +49,13 @@ export default function SendSwap() {
     toEstimate: string;
   }
 
-  const [stage, setStage] = useState<"send" | "swap">("send");
+  interface BuyState {
+    selectedAsset: Asset;
+    amount: string;
+    price: string;
+  }
+
+  const [stage, setStage] = useState<"send" | "swap" | "buy">("send");
   const [sendState, setSendState] = useState<SendState>({
     recipientAddress: "",
     amount: "",
@@ -54,8 +66,14 @@ export default function SendSwap() {
   const [swapState, setSwapState] = useState<SwapState>({
     fromAsset: ASSETS[0] ?? { symbol: "", balance: "" },
     fromAmount: "0",
-    toAsset: ASSETS[1] ?? { symbol: "", balance: "" },
+    toAsset: ASSETS[2] ?? { symbol: "", balance: "" },
     toEstimate: "",
+  });
+
+  const [buyState, setBuyState] = useState<BuyState>({
+    selectedAsset: ASSETS[0] ?? { symbol: "", balance: "" },
+    amount: "",
+    price: "",
   });
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -87,6 +105,12 @@ export default function SendSwap() {
     setDropdownToOpen(false);
   };
 
+  const selectBuyAsset = (asset: Asset) => {
+    setBuyState((prevState) => ({
+      ...prevState,
+      selectedAsset: asset,
+    }));
+  };
 
   const getGasEstimate = async (amount: string) => {
     const amountInWei = BigInt(amount); // Converts string to BigInt
@@ -132,6 +156,22 @@ export default function SendSwap() {
     }
   };
 
+  const updatePrice = (amount: string) => {
+    const updatedAmount = amount === "0" ? "0" : (parseFloat(amount) * 1915).toString();
+    setBuyState((prevState) => ({
+      ...prevState,
+      price: `$${updatedAmount}`
+    }));
+  };
+
+  const updateSwapEstimate = (amount: string) => {
+    const updatedAmount = amount === "0" ? "0" : (parseFloat(amount) * 1909.9).toString();
+    setSwapState((prevState) => ({
+      ...prevState,
+      toEstimate: updatedAmount
+    }));
+  };
+
   return (
     <div className="mx-5 pb-44 pt-12 xs:mx-7 sm:mx-auto sm:max-w-[480px]">
       <div className="rounded-xl border border-purple2">
@@ -151,6 +191,14 @@ export default function SendSwap() {
             }`}
           >
             <p className="fontmedium text-white">Swap</p>
+          </div>
+          <div
+            onClick={() => setStage("buy")}
+            className={`transition-300 cursor-pointer rounded-sm bg-purple2 bg-opacity-0 px-4.5 py-2 ${
+              stage === "buy" ? "bg-opacity-60" : "hover:bg-opacity-40"
+            }`}
+          >
+            <p className="fontmedium text-white">Buy</p>
           </div>
         </div>
         <div className="h-0.25 bg-purple2" />
@@ -215,6 +263,7 @@ export default function SendSwap() {
                   amount: e.target.value,
                 }));
                 getGasEstimate(e.target.value);
+                updateSwapEstimate(e.target.value);
               }}
             />
             
@@ -222,8 +271,7 @@ export default function SendSwap() {
               Gas (Estimated)
             </p>
             <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
-              <p className="mb-1 font-semibold text-white">{sendState.gasEstimate} ETH</p>
-              <p className="text-sm text-white opacity-60">Max: 0.0003125 ETH</p>
+              <p className="mb-1 font-semibold text-white">0.00048 ETH</p>
             </div>
             <Button
               type="button"
@@ -235,9 +283,7 @@ export default function SendSwap() {
             </Button>
           </div>
 
-
-
-          :
+          : stage === "swap" ? (
 
           <div className="p-4 md:p-5">
             <p className="mb-3 text-lg font-semibold text-white">
@@ -271,13 +317,21 @@ export default function SendSwap() {
               name="amount"
               type="text"
               placeholder="Amount..."
-              classes="mb-7 md:mb-9"
-              onChange={(e) =>
-                setSendState((prevState) => ({
+              value={swapState.fromAmount}
+              onChange={(e) => {
+                setSwapState((prevState) => ({
                   ...prevState,
-                  amount: e.target.value,
-                }))
-              }
+                  fromAmount: e.target.value,
+                }));
+                // Clear previous timeout if any
+                clearTimeout(timeoutRef.current);
+
+                // Set a new timeout to update the price after 0.5 seconds
+                timeoutRef.current = setTimeout(() => {
+                  updateSwapEstimate(e.target.value);
+                }, 500);
+              }}
+              classes="mb-7 md:mb-9"
             />
             <p className="mb-3 text-lg font-semibold text-white">
               To
@@ -310,12 +364,14 @@ export default function SendSwap() {
               Gas (Estimated)
             </p>
             <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
-              <p className="mb-1 font-semibold text-white">{sendState.gasEstimate} ETH</p>
-              <p className="text-sm text-white opacity-60">Max: 0.0003125 ETH</p>
+              <p className="mb-1 font-semibold text-white">{sendState.gasEstimate} 0.00052 ETH</p>
             </div>
 
+            <p className="mb-3 text-lg font-semibold text-white">
+              Amount
+            </p>
         <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
-          <p className="mb-1 font-semibold text-white">0.01 BTC</p>
+          <p className="mb-1 font-semibold text-white">{swapState.toEstimate} DAI</p>
         </div>
         <Button
           type="button"
@@ -326,7 +382,78 @@ export default function SendSwap() {
           Confirm
         </Button>
       </div>
+      ) : (
+    <div className="p-4 md:p-5">
+      <p className="mb-3 text-lg font-semibold text-white">Buy Asset</p>
+      <div className="mb-9 flex flex-col items-center justify-between rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+        <div
+          className="flex justify-between w-full"
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+        >
+          <div>
+            <p className="mb-1 font-semibold text-white">
+              {buyState.selectedAsset.symbol}
+            </p>
+            <p className="text-sm text-white opacity-60">
+              Balance: {buyState.selectedAsset.balance}{" "}
+              {buyState.selectedAsset.symbol}
+            </p>
+          </div>
+          <ChevronDown color={COLORS.white} />
+        </div>
+        {dropdownOpen && (
+          <div className="bg-purple3 mt-2 w-full rounded-md border border-purple2">
+            {ASSETS.map((asset) => (
+              <div
+                key={asset.symbol}
+                onClick={() => selectBuyAsset(asset)}
+                className="px-4 py-2 hover:bg-purple4 cursor-pointer"
+              >
+                <p className="mb-1 font-semibold text-white">{asset.symbol}</p>
+                <p className="text-sm text-white opacity-60">
+                  Balance: {asset.balance} {asset.symbol}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+        <TextInput
+          id="amount"
+          name="amount"
+          type="text"
+          placeholder="Amount..."
+          classes="mb-7 md:mb-9"
+          onChange={(e) => {
+            const updatedAmount = e.target.value;
+            setBuyState((prevState) => ({
+              ...prevState,
+              amount: updatedAmount,
+            }));
 
+            // Clear previous timeout if any
+            clearTimeout(timeoutRef.current);
+
+            // Set a new timeout to update the price after 0.5 seconds
+            timeoutRef.current = setTimeout(() => {
+              updatePrice(updatedAmount);
+            }, 500);
+          }}
+        />
+        <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+          <p className="mb-1 font-semibold text-white">Price: {buyState.price}</p>
+        </div>
+        <Button
+          type="button"
+          hierarchy="primary"
+          font="font-semibold"
+          classes="w-full"
+        >
+          Buy
+        </Button>
+      </div>
+
+      )
       }
 
         
