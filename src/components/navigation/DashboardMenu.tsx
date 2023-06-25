@@ -52,7 +52,7 @@ export default function DashboardMenu() {
       label: "Log Out",
       icon: <LogOut size={24} color={COLORS.white} />,
       isActive: false,
-      onClick: async () => {() => signOut(); router.push("/log-in/")},
+      onClick: async () => {() => signOut(); router.push("/")},
     },
   ];
 

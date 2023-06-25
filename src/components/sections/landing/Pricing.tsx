@@ -16,7 +16,7 @@ const PRICING_CARDS = [
   },
   {
     title: "Anonymous",
-    description: "You do not need to share anything, but there is no free quota.",
+    description: "You can remain fully anonymous, but there is no free quota.",
     icon: defaultIcon as StaticImageData,
   },
 ];

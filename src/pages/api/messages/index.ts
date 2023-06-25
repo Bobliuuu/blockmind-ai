@@ -8,6 +8,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  const messages = await prisma.messages.findMany();
-  res.json(messages);
+  // const messages = await prisma.messages.findMany();
+  // res.json(messages);
 }
