@@ -24,6 +24,7 @@ export default function Hero() {
       >
         Get Started
       </Button>
+      {/* https://near.org#/near/widget/ComponentDetailsPage?src=andrewqiao.near/widget/Untitled-0 */}
     </section>
   );
 }
