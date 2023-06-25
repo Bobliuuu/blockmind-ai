@@ -5,13 +5,15 @@ import worldCoinIcon from "~/../public/icons/worldcoin-card.png";
 
 const PRICING_CARDS = [
   {
-    title: "WorldCoin",
-    description: "Accounts created using WorldCoin are eligible for 50 free messages.",
+    title: "WorldCoin or Polygon",
+    description:
+      "Accounts created using WorldCoin or Polygon are eligible for 50 free messages.",
     icon: worldCoinIcon as StaticImageData,
   },
   {
     title: "Google",
-    description: "Accounts created using WorldCoin are eligible for 15 free messages.",
+    description:
+      "Accounts created using WorldCoin are eligible for 15 free messages.",
     icon: googleIcon as StaticImageData,
   },
   {
@@ -27,12 +29,10 @@ export default function Pricing() {
       <h1 className="mb-8 font-display text-5xl font-bold text-white xl:text-6xl">
         Pricing
       </h1>
-      
+
       <p className="mb-6 text-beige md:text-lg xl:mb-6">
         There are 3 different methods you can use to{" "}
-        <span className="text-gradient">
-          create an account
-        </span>.
+        <span className="text-gradient">create an account</span>.
       </p>
       <div className="flex flex-wrap justify-center gap-12 ">
         {PRICING_CARDS.map((card) => (
