@@ -106,7 +106,7 @@ export default function NFTStudio() {
               hierarchy="primary"
               font="font-semibold"
             >
-              Generate
+              Generate with Stable Diffusion
             </Button>
           </div>
           <p className="mb-4 font-semibold text-white">
@@ -153,7 +153,7 @@ export default function NFTStudio() {
             hierarchy="primary"
             font="font-semibold"
           >
-            Generate with Stable Diffusion
+            Generate NFT
           </Button>
         </div>
         <div className="flex flex-col gap-16">
