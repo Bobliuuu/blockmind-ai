@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import {
+  Edit,
   LogOut,
   MessageSquare,
   Repeat,
@@ -7,7 +8,7 @@ import {
   User,
   Image,
   Edit2,
-  Trash2
+  Trash2,
 } from "react-feather";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "next-auth/react";
