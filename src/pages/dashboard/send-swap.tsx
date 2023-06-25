@@ -24,25 +24,116 @@ export default function SendSwap() {
     },
   ];
 
-  const [stage, setStage] = useState<"send" | "swap">("send");
-  const [sendState, setSendState] = useState<{
+  interface Asset {
+    symbol: string;
+    balance: string;
+  }
+
+  interface SendState {
     recipientAddress: string;
     amount: string;
-    selectedAsset: {
-      symbol: string;
-      balance: string;
-    };
-  }>({
+    selectedAsset: Asset;
+    gasEstimate: string;
+  }
+  
+  interface SwapState {
+    fromAsset: Asset;
+    fromAmount: string;
+    toAsset: Asset;
+    toEstimate: string;
+  }
+
+  const [stage, setStage] = useState<"send" | "swap">("send");
+  const [sendState, setSendState] = useState<SendState>({
     recipientAddress: "",
     amount: "",
-    selectedAsset: {
-      symbol: "ETH",
-      balance: "0.123",
-    },
+    selectedAsset: ASSETS[0] ?? { symbol: "", balance: "" },
+    gasEstimate: "",
   });
 
+  const [swapState, setSwapState] = useState<SwapState>({
+    fromAsset: ASSETS[0] ?? { symbol: "", balance: "" },
+    fromAmount: "0",
+    toAsset: ASSETS[1] ?? { symbol: "", balance: "" },
+    toEstimate: "",
+  });
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  
+  const [dropdownFromOpen, setDropdownFromOpen] = useState(false);
+  const [dropdownToOpen, setDropdownToOpen] = useState(false);
+
+  const selectAsset = (asset: Asset) => {
+    setSendState((prevState) => ({
+      ...prevState,
+      selectedAsset: asset,
+    }));
+    setDropdownOpen(false);
+  };
+
+  const selectFromAsset = (asset: Asset) => {
+    setSwapState((prevState) => ({
+      ...prevState,
+      fromAsset: asset,
+    }));
+    setDropdownFromOpen(false);
+  };
+
+  const selectToAsset = (asset: Asset) => {
+    setSwapState((prevState) => ({
+      ...prevState,
+      toAsset: asset,
+    }));
+    setDropdownToOpen(false);
+  };
+
+
+  const getGasEstimate = async (amount: string) => {
+    const amountInWei = BigInt(amount); // Converts string to BigInt
+    const amountInHex = '0x' + amountInWei.toString(16); // Converts BigInt to hexadecimal
+    console.log("sending", amount, amountInHex);
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "method": "eth_estimateGas",
+      "params": [
+        {
+          "from": "0x8D97689C9818892B700e27F316cc3E41e17fBeb9",
+          "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601",
+          "value": amountInHex,
+        }
+      ],
+      "id": 1,
+      "jsonrpc": "2.0"
+    });
+    
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    try {
+      const response = await fetch("https://crimson-black-yard.ethereum-sepolia.discover.quiknode.pro/ad3972766919f4086bed40828f2eb1eb1be8c866/", requestOptions);
+      const data = await response.json();
+      console.log(data.result)
+      const gasEstimate = parseInt(data.result, 16); // Parse as hexadecimal (base 16)
+      console.log(gasEstimate)
+
+      setSendState((prevState) => ({
+        ...prevState,
+        gasEstimate: gasEstimate.toString()
+      }));
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   return (
-    <div className="mx-5 pb-44 pt-32 xs:mx-7 sm:mx-auto sm:max-w-[480px]">
+    <div className="mx-5 pb-44 pt-12 xs:mx-7 sm:mx-auto sm:max-w-[480px]">
       <div className="rounded-xl border border-purple2">
         <div className="flex gap-1 p-4 md:p-5">
           <div
@@ -63,50 +154,183 @@ export default function SendSwap() {
           </div>
         </div>
         <div className="h-0.25 bg-purple2" />
-        <div className="p-4 md:p-5">
-          <p className="mb-3 text-lg font-semibold text-white">
-            Recipient Address
-          </p>
-          <TextInput
-            id="recipient-address"
-            name="recipient-address"
-            type="text"
-            placeholder="Recipient address..."
-            value={sendState.recipientAddress}
-            onChange={(e) =>
-              setSendState((prevState) => ({
-                ...prevState,
-                recipientAddress: e.target.value,
-              }))
-            }
-            classes="mb-7 md:mb-9"
-          />
-          <p className="mb-3 text-lg font-semibold text-white">Asset</p>
-          <div className="mb-9 flex items-center justify-between rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
-            <div>
-              <p className="mb-1 font-semibold text-white">ETH</p>
-              <p className="text-sm text-white opacity-60">
-                Balance: 0.123 ETH
-              </p>
+
+                
+
+        {stage == "send" ? 
+          <div className="p-4 md:p-5">
+            <p className="mb-3 text-lg font-semibold text-white">
+              Recipient Address
+            </p>
+            <TextInput
+              id="recipient-address"
+              name="recipient-address"
+              type="text"
+              placeholder="Recipient address..."
+              value={sendState.recipientAddress}
+              onChange={(e) =>
+                setSendState((prevState) => ({
+                  ...prevState,
+                  recipientAddress: e.target.value,
+                }))
+              }
+              classes="mb-7 md:mb-9"
+            />
+            <p className="mb-3 text-lg font-semibold text-white">Asset</p>
+            <div className="mb-9 flex flex-col items-center justify-between rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+              <div className="flex justify-between w-full" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                <div>
+                  <p className="mb-1 font-semibold text-white">{sendState.selectedAsset.symbol}</p>
+                  <p className="text-sm text-white opacity-60">
+                    Balance: {sendState.selectedAsset.balance} {sendState.selectedAsset.symbol}
+                  </p>
+                </div>
+                <ChevronDown color={COLORS.white} />
+              </div>
+              {dropdownOpen && (
+                <div className="bg-purple3 mt-2 w-full rounded-md border border-purple2">
+                  {ASSETS.map((asset) => (
+                    <div key={asset.symbol} onClick={() => selectAsset(asset)} className="px-4 py-2 hover:bg-purple4 cursor-pointer">
+                      <p className="mb-1 font-semibold text-white">{asset.symbol}</p>
+                      <p className="text-sm text-white opacity-60">
+                        Balance: {asset.balance} {asset.symbol}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <ChevronDown color={COLORS.white} />
+            <p className="mb-3 text-lg font-semibold text-white">
+              Amount
+            </p>
+            <TextInput
+              id="amount"
+              name="amount"
+              type="text"
+              placeholder="Amount..."
+              classes="mb-7 md:mb-9"
+              onChange={(e) => {
+                setSendState((prevState) => ({
+                  ...prevState,
+                  amount: e.target.value,
+                }));
+                getGasEstimate(e.target.value);
+              }}
+            />
+            
+            <p className="mb-3 text-lg font-semibold text-white">
+              Gas (Estimated)
+            </p>
+            <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+              <p className="mb-1 font-semibold text-white">{sendState.gasEstimate} ETH</p>
+              <p className="text-sm text-white opacity-60">Max: 0.0003125 ETH</p>
+            </div>
+            <Button
+              type="button"
+              hierarchy="primary"
+              font="font-semibold"
+              classes="w-full"
+            >
+              Confirm
+            </Button>
           </div>
-          <p className="mb-3 text-lg font-semibold text-white">
-            Gas (Estimated)
-          </p>
-          <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
-            <p className="mb-1 font-semibold text-white">0.0003125 ETH</p>
-            <p className="text-sm text-white opacity-60">Max: 0.0003125 ETH</p>
-          </div>
-          <Button
-            type="button"
-            hierarchy="primary"
-            font="font-semibold"
-            classes="w-full"
-          >
-            Confirm
-          </Button>
+
+
+
+          :
+
+          <div className="p-4 md:p-5">
+            <p className="mb-3 text-lg font-semibold text-white">
+              From
+            </p>
+            <div className="mb-9 flex flex-col items-center justify-between rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+              <div className="flex justify-between w-full" onClick={() => setDropdownFromOpen(!dropdownFromOpen)}>
+                <div>
+                  <p className="mb-1 font-semibold text-white">{swapState.fromAsset.symbol}</p>
+                  <p className="text-sm text-white opacity-60">
+                    Balance: {swapState.fromAsset.balance} {swapState.fromAsset.symbol}
+                  </p>
+                </div>
+                <ChevronDown color={COLORS.white} />
+              </div>
+              {dropdownFromOpen && (
+                <div className="bg-purple3 mt-2 w-full rounded-md border border-purple2">
+                  {ASSETS.map((asset) => (
+                    <div key={asset.symbol} onClick={() => selectFromAsset(asset)} className="px-4 py-2 hover:bg-purple4 cursor-pointer">
+                      <p className="mb-1 font-semibold text-white">{asset.symbol}</p>
+                      <p className="text-sm text-white opacity-60">
+                        Balance: {asset.balance} {asset.symbol}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <TextInput
+              id="amount"
+              name="amount"
+              type="text"
+              placeholder="Amount..."
+              classes="mb-7 md:mb-9"
+              onChange={(e) =>
+                setSendState((prevState) => ({
+                  ...prevState,
+                  amount: e.target.value,
+                }))
+              }
+            />
+            <p className="mb-3 text-lg font-semibold text-white">
+              To
+            </p>
+            <div className="mb-9 flex flex-col items-center justify-between rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+              <div className="flex justify-between w-full" onClick={() => setDropdownToOpen(!dropdownToOpen)}>
+                <div>
+                  <p className="mb-1 font-semibold text-white">{swapState.toAsset.symbol}</p>
+                  <p className="text-sm text-white opacity-60">
+                    Balance: {swapState.toAsset.balance} {swapState.toAsset.symbol}
+                  </p>
+                </div>
+                <ChevronDown color={COLORS.white} />
+              </div>
+              {dropdownToOpen && (
+                <div className="bg-purple3 mt-2 w-full rounded-md border border-purple2">
+                  {ASSETS.map((asset) => (
+                    <div key={asset.symbol} onClick={() => selectToAsset(asset)} className="px-4 py-2 hover:bg-purple4 cursor-pointer">
+                      <p className="mb-1 font-semibold text-white">{asset.symbol}</p>
+                      <p className="text-sm text-white opacity-60">
+                        Balance: {asset.balance} {asset.symbol}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <p className="mb-3 text-lg font-semibold text-white">
+              Gas (Estimated)
+            </p>
+            <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+              <p className="mb-1 font-semibold text-white">{sendState.gasEstimate} ETH</p>
+              <p className="text-sm text-white opacity-60">Max: 0.0003125 ETH</p>
+            </div>
+
+        <div className="mb-9 rounded-md border border-purple2 bg-purple3 px-4 py-3.5">
+          <p className="mb-1 font-semibold text-white">0.01 BTC</p>
         </div>
+        <Button
+          type="button"
+          hierarchy="primary"
+          font="font-semibold"
+          classes="w-full"
+        >
+          Confirm
+        </Button>
+      </div>
+
+      }
+
+        
+
       </div>
     </div>
   );
