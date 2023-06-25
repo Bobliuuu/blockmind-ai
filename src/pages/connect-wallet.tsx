@@ -3,11 +3,14 @@ import Image, { type StaticImageData } from "next/image";
 import AuthLayout from "~/components/layouts/AuthLayout";
 import Button from "~/components/UI/Button";
 import metamaskLogo from "~/../public/icons/metamask.svg";
+import { MetaMaskSDK } from '@metamask/sdk';
 
 export default function ConnectWallet() {
   const router = useRouter();
 
   const handleConnectMetamask = () => {
+    const MMSDK = new MetaMaskSDK(options);
+    const ethereum = MMSDK.getProvider();
     if (typeof window.ethereum !== 'undefined') {
       try {
         console.log('Connecting...');

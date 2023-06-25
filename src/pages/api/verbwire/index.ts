@@ -10,5 +10,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }, {accept: 'application/json'})
     .then(({ data }) => console.log(data))
     .catch(err => console.error(err));
-  res.json({ response: "Hello World" });
+  res.json({ response: "Mint completed!" });
 }

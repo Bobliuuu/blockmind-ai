@@ -26,6 +26,7 @@ from langchain.tools.human.tool import HumanInputRun
 from langchain.vectorstores.base import VectorStoreRetriever
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
 import dotenv
+import requests
 
 app = Flask(__name__)
 load_dotenv()
@@ -70,4 +71,15 @@ def chat():
     
 @app.route("/nft", methods=["GET", "POST"])
 def nft():
-    return "Test endpoint, may not use"
+    url = "https://api.verbwire.com/v1/nft/mint/mintFromMetadataUrl"
+
+    payload = "-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"quantity\"\r\n\r\n1\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"chain\"\r\n\r\ngoerli\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"allowPlatformToOperateToken\"\r\n\r\ntrue\r\n-----011000010111000001101001--\r\n\r\n"
+    headers = {
+        "accept": "application/json",
+        "content-type": "multipart/form-data; boundary=---011000010111000001101001"
+    }
+
+    response = requests.post(url, data=payload, headers=headers)
+
+    return jsonify(response = response)
+
