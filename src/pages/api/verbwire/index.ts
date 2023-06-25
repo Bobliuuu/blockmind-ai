@@ -1,7 +1,7 @@
 import { type NextApiRequest, type NextApiResponse } from "next";
+import { sdk } from 'api';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const sdk = require('api')('@verbwire/v1.0#g4z182klj3bh6g6');
 
   sdk.postNftMintMintfrommetadataurl({
     quantity: '1',

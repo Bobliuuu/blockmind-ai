@@ -8,7 +8,23 @@ export default function ConnectWallet() {
   const router = useRouter();
 
   const handleConnectMetamask = () => {
-    console.log("connect metamask");
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        console.log('Connecting...');
+        await ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          const walletAddress = accounts[0];
+          console.log('Wallet Address:', walletAddress);
+          setGeneratedAddress(walletAddress);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } 
+    else {
+      alert("Please install Metamask");
+    }
   };
 
   return (

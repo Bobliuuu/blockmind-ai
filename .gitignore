@@ -42,3 +42,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 *.pyc
+
+hardhat/node_modules
