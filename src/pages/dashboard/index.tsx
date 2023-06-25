@@ -1,14 +1,21 @@
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Send, User } from "react-feather";
+import { Send, ThumbsDown, ThumbsUp, User } from "react-feather";
 import logo from "~/../public/icons/logo.svg";
 import { COLORS } from "~/constants/colors";
 import axios from "axios";
+import Link from "next/link";
+
+type Message = {
+  response?: string;
+  url?: string;
+};
 
 export default function Chat() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const chatRef = useRef<HTMLDivElement>(null);
+  const [showUMA, setShowUMA] = useState("");
 
   useEffect(() => {
     if (chatRef.current) {
@@ -23,21 +30,22 @@ export default function Chat() {
     });
   }, [messages]);
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      const response = await axios.get("/api/messages");
-      setMessages(response.data as string[]);
-    };
+  // useEffect(() => {
+  //   const fetchMessages = async () => {
+  //     const response = await axios.get("/api/messages");
+  //     setMessages(response.data as string[]);
+  //   };
 
-    void fetchMessages();
-  }, []);
+  //   void fetchMessages();
+  // }, []);
 
-  const handleSendMessage = async () => { 
-    setMessages((prev) => [...prev, input]); // user input
-    var response = await axios.post("/api/chat", { data: input });
-    setMessages((prev) => [...prev, response.data as string]); // AI output
+  const handleSendMessage = async () => {
+    setShowUMA("");
+    setMessages((prev: Message[]) => [...prev, { response: input }]); // user input
+    const { data } = await axios.post("/api/chat", { input });
+    setMessages((prev: Message[]) => [...prev, data as Message]);
     setInput("");
-    response = await axios.post("/api/save", { data: messages });
+    // response = await axios.post("/api/save", { data: messages });
   };
 
   return (
@@ -48,24 +56,53 @@ export default function Chat() {
       >
         <div className="mx-5 grid gap-7 xs:mx-7 lg:mx-auto lg:max-w-[720px] xl:gap-9">
           {messages.map((message, i) => (
-            <div className="flex gap-4 xl:gap-10" key={i}>
-              {i % 2 === 0 ? (
-                <Image
-                  src={logo as StaticImageData}
-                  alt="logo"
-                  className="w-6 flex-shrink-0 xl:w-7"
-                />
-              ) : (
-                <User
-                  size={48}
-                  color={COLORS.blue}
-                  className="w-6 flex-shrink-0 xl:w-7"
-                />
-              )}
-              <div className="rounded-sm border border-purple2 px-4 py-3 2xl:rounded-lg 2xl:px-5 2xl:py-4">
-                <p className="leading-loose text-white">{message}</p>
+            <>
+              <div className="flex gap-4 xl:gap-10" key={i}>
+                {i % 2 === 0 ? (
+                  <Image
+                    src={logo as StaticImageData}
+                    alt="logo"
+                    className="w-6 flex-shrink-0 xl:w-7"
+                  />
+                ) : (
+                  <User
+                    size={48}
+                    color={COLORS.blue}
+                    className="w-6 flex-shrink-0 xl:w-7"
+                  />
+                )}
+                <div className="rounded-sm border border-purple2 px-4 py-3 2xl:rounded-lg 2xl:px-5 2xl:py-4">
+                  <p
+                    className="leading-loose text-white"
+                    dangerouslySetInnerHTML={{
+                      __html: message.response,
+                    }}
+                  />
+                  {message.url && (
+                    <Link href={message.url} className="text-blue underline">
+                      Learn More
+                    </Link>
+                  )}
+                  {i % 2 === 1 && (
+                    <div className="mt-6 flex justify-end gap-4">
+                      <ThumbsUp color={COLORS.white} size={24} />
+                      <ThumbsDown
+                        onClick={() => setShowUMA(message.response)}
+                        color={COLORS.white}
+                        size={24}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+              {showUMA === message.response && (
+                <div className="rounded-sm border border-purple2 px-4 py-3 2xl:rounded-lg 2xl:px-5 2xl:py-4">
+                  <p className="leading-loose text-white">
+                    Generating response from UMA...
+                  </p>
+                </div>
+              )}
+            </>
           ))}
         </div>
       </div>
