@@ -4,8 +4,12 @@ import TextInput from "~/components/UI/TextInput";
 import logo from "~/../public/icons/logo.svg";
 
 export default function NFTStudio() {
+  const handleGenerateClick = () => {
+    window.open("https://bafybeifq6sm7pj2r4yu5anbawikzaemre6ocg3zvgw3kwh7rnwpzzvvece.ipfs.dweb.link/ri.jpg");
+  };
+
   return (
-    <div className="mx-dashboard pt-32">
+    <div className="mx-dashboard pt-12">
       <h1 className="mb-6 font-display text-5xl font-bold text-white xl:text-6xl">
         NFT Studio
       </h1>
@@ -39,7 +43,12 @@ export default function NFTStudio() {
           <p className="mb-14 max-w-[540px] rounded-md border border-purple2 bg-purple3 px-5 py-4.5 text-white">
             0.00123 ETH
           </p>
-          <Button type="button" hierarchy="primary" font="font-semibold">
+          <Button
+            type="button"
+            hierarchy="primary"
+            font="font-semibold"
+            onClick={handleGenerateClick}
+          >
             Generate
           </Button>
         </div>
