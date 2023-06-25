@@ -9,11 +9,14 @@ app = Flask(__name__)
 def index():
     return "Hello, World"
 
-def 
-
 @app.route("/chat")
-def index():
-    initial = openai.ChatCompletion.create(
+def chat():
+    try:
+        prompt = request.args["prompt"]
+    except KeyError:
+        return "Please provide a prompt"
+
+    return openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     messages=[
             {"role": "system", "content": "You are smart blockchain assistant."}
@@ -38,5 +41,9 @@ def index():
     )["choices"][0]["message"]["content"]
 
 @app.route("/nft")
-def index():
+def nft():
+    return "Test endpoint, may not use"
+
+@app.route("/audit")
+def audit():
     return "Test endpoint, may not use"
