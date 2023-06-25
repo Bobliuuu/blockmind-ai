@@ -8,9 +8,9 @@ export default function NFTStudio() {
   const router = useRouter();
 
   const handleGenerateClick = () => {
-    void router.push("/nftstudioimage");
-
-    // window.open("https://bafybeifq6sm7pj2r4yu5anbawikzaemre6ocg3zvgw3kwh7rnwpzzvvece.ipfs.dweb.link/ri.jpg");
+    window.open(
+      "https://bafybeifq6sm7pj2r4yu5anbawikzaemre6ocg3zvgw3kwh7rnwpzzvvece.ipfs.dweb.link/ri.jpg"
+    );
   };
 
   return (
@@ -49,10 +49,10 @@ export default function NFTStudio() {
             0.00123 ETH
           </p>
           <Button
-            type="button"
+            type="route"
+            route="/dashboard/nft"
             hierarchy="primary"
             font="font-semibold"
-            onClick={handleGenerateClick}
           >
             Generate
           </Button>
