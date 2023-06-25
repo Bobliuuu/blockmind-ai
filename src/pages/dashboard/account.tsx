@@ -3,10 +3,11 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Loading from "~/components/sections/loading/loading";
 import Unauthenticated from "~/components/sections/error/unauthenticated";
-import Image from "next/image";
 import googleIcon from "~/../public/icons/google-card.png";
 import { ShoppingCart } from "react-feather";
-
+import metamaskLogo from "~/../public/icons/metamask.svg";
+import Image, { type StaticImageData } from "next/image";
+import { ethers } from "ethers";
 export default function Settings() {
   const router = useRouter();
 
@@ -17,6 +18,27 @@ export default function Settings() {
   } else if (status === "unauthenticated") {
     return <Unauthenticated />
   }
+
+  const handleConnectMetamask = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        console.log('Connecting...');
+        await ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          const walletAddress = accounts[0];
+          console.log('Wallet Address:', walletAddress);
+          setGeneratedAddress(walletAddress);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } 
+    else {
+      alert("Please install Metamask");
+    }
+  };
+
 
   return (
     <div className="mx-dashboard mt-32">
@@ -59,6 +81,24 @@ export default function Settings() {
         </p>
         <button className="bg-gradient px-5 py-4.5">Connect New Wallet</button>
       </div>
+
+      <Button
+        type="button"
+        onClick={handleConnectMetamask}
+        hierarchy="primary"
+        font="font-semibold"
+        icon={
+          <Image
+            src={metamaskLogo as StaticImageData}
+            alt="MetaMask logo"
+            className="w-5"
+          />
+        }
+        classes="w-full mb-5 md:mb-6"
+      >
+        Connect with MetaMask
+      </Button>
+
       <h3 className="mb-4 text-xl font-semibold text-white">Account</h3>
     </div>
   );
