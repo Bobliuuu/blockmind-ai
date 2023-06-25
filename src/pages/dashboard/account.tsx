@@ -66,7 +66,7 @@ export default function Settings() {
         type="submit"
         hierarchy="primary"
         font="font-semibold"
-        classes="w-full mb-8 md:mb-8 w-[400px]"
+        classes="w-full mb-8 md:mb-8 w-[400px] max-w-[400px]"
         icon={<ShoppingCart size={48} className="w-5 xs:w-6 lg:w-7" />}
       >
         Buy More Queries
@@ -94,12 +94,10 @@ export default function Settings() {
             className="w-5"
           />
         }
-        classes="w-full mb-5 md:mb-6"
+        classes="w-full mb-5 md:mb-6 w-[400px] max-w-[400px]"
       >
         Connect with MetaMask
       </Button>
-
-      <h3 className="mb-4 text-xl font-semibold text-white">Account</h3>
     </div>
   );
 }
