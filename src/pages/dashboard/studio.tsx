@@ -94,11 +94,21 @@ export default function NFTStudio() {
           <p className="mb-4 font-semibold text-white">
             Enter the URL of an image you would like to base your NFT off of.
           </p>
-          <TextInput
-            type="text"
-            placeholder="Image URL"
-            classes="max-w-[540px] mb-12"
-          />
+          <div className="mb-12 flex items-center gap-4">
+            <TextInput
+              type="text"
+              placeholder="Image URL"
+              classes="max-w-[540px] flex-grow"
+            />
+            <Button
+              type="route"
+              route="/dashboard/nft"
+              hierarchy="primary"
+              font="font-semibold"
+            >
+              Generate
+            </Button>
+          </div>
           <p className="mb-4 font-semibold text-white">
             Explain the functionality of your NFT.
           </p>
@@ -143,7 +153,7 @@ export default function NFTStudio() {
             hierarchy="primary"
             font="font-semibold"
           >
-            Generate
+            Generate with Stable Diffusion
           </Button>
         </div>
         <div className="flex flex-col gap-16">
